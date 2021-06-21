@@ -147,7 +147,7 @@ class RoomScene {
 
     let image_instance = new GameObject(
       id,
-      "BitmapText",
+      "Text",
       x,
       y,
       texture,
