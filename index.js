@@ -2,18 +2,12 @@ const {
     v4: uuidv4
 } = require('uuid');
 const fs = require('fs');
-// const process = require('process')
 
 class SimpleAnimation {
     constructor(gameObject) {
-		global.animation = this
+	 	global.animation = this
 	}
 }
-
-
-let Phaser = {}
-Phaser.GameObjects = {}
-
 
 class RoomScene {
 
@@ -386,10 +380,13 @@ class ContainerDecompiler {
 }
 
 
+let Phaser = {}
+Phaser.GameObjects = {}
 Phaser.GameObjects.Container = ContainerDecompiler;
 
 
 fs.readFile(process.argv[2], 'UTF-8', (err, data) => {
+	data = data.substr(data.search('class'))
 	if(process.argv[4] == 'prefab') {
 		eval(data + ` new ${process.argv[3]}(new Prefab())`)
 	} else {
