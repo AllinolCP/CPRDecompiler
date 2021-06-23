@@ -81,8 +81,7 @@ class RoomScene {
       this.output.displayList.unshift(this.image_temp_list[i]);
     }
     for (const [key, val] of Object.entries(this)) {
-      // console.log(val.constructor.name);
-      if (val.constructor.name == "GameObject") {
+      if (val.type) {
         val.label = key;
         val.scope = "CLASS";
       }
@@ -169,10 +168,6 @@ class RoomScene {
       list: [],
       components: [],
     };
-
-    //console.log(this)
-    // if (!this.output) this.init()
-
     this.output.displayList.unshift(container);
 
     return new Container(this, id, container);
@@ -200,9 +195,8 @@ class RoomScene {
   }
 
   containerAdd(container, item) {
-    let cocainer = this.getItembyId(container);
+    let containerTemp = this.getItembyId(container);
 
-    // console.log(item.constructor === Container) del item.decompiler
     if (item.type == "Image") this.removeImagebyValue(item);
     if (item.type == "Container") {
       this.removeDisplayListbyItem(item);
@@ -212,10 +206,7 @@ class RoomScene {
     if (item.type == "Text" || item.type == "BitmapText") {
       if (typeof item.fontSize === "number")
         item.fontSize = `${item.fontSize}px`;
-    }
-
-    //console.log(container)
-    cocainer.list.push(item);
+    containerTemp.list.push(item);
   }
 }
 
@@ -367,7 +358,6 @@ class Container {
 
 class ContainerDecompiler {
   constructor(prefab) {
-    console.log(prefab);
     this.prefab = prefab;
     this.list = [];
     let id = uuidv4();
@@ -426,21 +416,13 @@ class ContainerDecompiler {
   _init() {
     let output = new Object();
     for (const [key, val] of Object.entries(this)) {
-		// console.log(key)
-      // console.log(val.constructor.name);
-		// console.log(this.v_emotes)
-		console.log(val.type)
-		// console.log(val.
 		if(val.type == "Container") {
 			val.instance.label = key,
 			val.instance.scope = "CLASS"
 			continue;
 		}
-		
         val.label = key;
         val.scope = "CLASS";
-	  // console.log(val)
-      // use key and val
     }
 
     delete this.prefab.add;
@@ -451,10 +433,7 @@ class ContainerDecompiler {
   }
 
   containerAdd(container, item) {
-	  // console.log(container)
-    let cocainer = this.getItembyId(container);
-
-	// console.log(cocainer)
+    let containerTemp = this.getItembyId(container);
 
     if (item.type == "Container") {
       item = item.instance;
@@ -464,17 +443,11 @@ class ContainerDecompiler {
       if (typeof item.fontSize === "number")
         item.fontSize = `${item.fontSize}px`;
     }
-
-    //console.log(container)
-    cocainer.list.push(item);
+    containerTemp.list.push(item);
   }
   
   add(instance) {
-	if(instance.type == "Container") {
-		
-		instance = instance.instance
-		// console.log(typeof instance)
-	}
+	if(instance.type == "Container") instance = instance.instance
     this.output.displayList[0].list.unshift(instance);
   }
   
@@ -484,11 +457,16 @@ let Phaser = {};
 Phaser.GameObjects = {};
 Phaser.GameObjects.Container = ContainerDecompiler;
 
+
 fs.readFile(process.argv[2], "UTF-8", (err, data) => {
+	
   data = data.substr(data.search("class"));
-  if (process.argv[4] == "prefab") {
-    eval(data + ` new ${process.argv[3]}(new Prefab())`);
+  let className = data.match(/class (.*?) extends/)[1]
+  console.log(className)
+  
+  if (process.argv[3] == "prefab") {
+    eval(data + ` new ${className}(new Prefab())`);
   } else {
-    eval(data + ` new ${process.argv[3]}`);
+    eval(data + ` new ${className}`);
   }
-});
+})
