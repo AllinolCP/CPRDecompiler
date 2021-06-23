@@ -1,6 +1,8 @@
 const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
 
+
+
 class SimpleAnimation {
   constructor(gameObject) {
     global.animation = this;
@@ -72,7 +74,7 @@ class RoomScene {
       this.animation_output.anims.push(this.anim);
 
       fs.writeFileSync(
-        `./out/${process.argv[3]}.json`,
+        `./out/${className}.json`,
         JSON.stringify(this.animation_output, null, 4)
       );
     }
@@ -88,7 +90,7 @@ class RoomScene {
       // use key and val
     }
     fs.writeFileSync(
-      `./out/${process.argv[3]}.scene`,
+      `./out/${className}.scene`,
       JSON.stringify(this.output, null, 4)
     );
   }
@@ -204,8 +206,8 @@ class RoomScene {
     }
 
     if (item.type == "Text" || item.type == "BitmapText") {
-      if (typeof item.fontSize === "number")
-        item.fontSize = `${item.fontSize}px`;
+      if (typeof item.fontSize === "number") item.fontSize = `${item.fontSize}px`;
+	}
     containerTemp.list.push(item);
   }
 }
@@ -364,7 +366,7 @@ class ContainerDecompiler {
     let container = {
       type: "Container",
       id,
-      label: process.argv[3],
+      label: className,
       x: 0,
       y: 0,
       list: [],
@@ -374,7 +376,7 @@ class ContainerDecompiler {
     (this.output.id = uuidv4()),
       (this.output.sceneType = "PREFAB"),
       (this.output.settings = {
-        sceneKey: process.argv[3],
+        sceneKey: className,
         preloadMethodName: "",
         preloadPackFiles: [],
         createMethodName: "_create",
@@ -427,7 +429,7 @@ class ContainerDecompiler {
 
     delete this.prefab.add;
     fs.writeFileSync(
-      `./out/${process.argv[3]}.scene`,
+      `./out/${className}.scene`,
       JSON.stringify(this.output, null, 4)
     );
   }
@@ -461,7 +463,7 @@ Phaser.GameObjects.Container = ContainerDecompiler;
 fs.readFile(process.argv[2], "UTF-8", (err, data) => {
 	
   data = data.substr(data.search("class"));
-  let className = data.match(/class (.*?) extends/)[1]
+  global.className = data.match(/class (.*?) extends/)[1]
   console.log(className)
   
   if (process.argv[3] == "prefab") {
