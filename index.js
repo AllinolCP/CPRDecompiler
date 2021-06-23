@@ -450,7 +450,7 @@ class ContainerDecompiler {
   
   add(instance) {
 	if(instance.type == "Container") instance = instance.instance
-    this.output.displayList[0].list.unshift(instance);
+    this.output.displayList[0].list.push(instance);
   }
   
 }
