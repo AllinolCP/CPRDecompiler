@@ -1,5 +1,26 @@
 {
+  "name": "cpr-decompiler",
+  "version": "1.0.0",
+  "description": "Decompiles CPRewritten.net's JS files into PhaserEditor2D.com Scene files",
+  "main": "index.js",
   "dependencies": {
     "uuid": "^8.3.2"
-  }
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AllinolCP/CPRDecompiler.git"
+  },
+  "author": "Allinol",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AllinolCP/CPRDecompiler/issues"
+  },
+  "dependencies": {
+    "uuid": "^8.3.2"
+  },
+  "homepage": "https://github.com/AllinolCP/CPRDecompiler#readme"
 }
