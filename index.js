@@ -1,11 +1,12 @@
 const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
 
+global.animations = new Array();
 
 
 class SimpleAnimation {
   constructor(gameObject) {
-    global.animation = this;
+    animations.push(this)
   }
 }
 
@@ -44,40 +45,42 @@ class RoomScene {
 
     this._create();
 
-    if (typeof animation != "undefined") {
-      this.anim = {
-        key: animation.animKey,
-        type: "frame",
-        frames: [],
-        frameRate: animation.frameRate,
-        duration: null,
-        skipMissedFrames: true,
-        delay: 0,
-        repeat: -1,
-        repeatDelay: 0,
-        yoyo: false,
-        showOnStart: false,
-        hideOnComplete: false,
-      };
+    if (animations.length > 0) {
+		for (animation of animations) {
+		  this.anim = {
+			key: animation.animKey,
+			type: "frame",
+			frames: [],
+			frameRate: animation.frameRate,
+			duration: null,
+			skipMissedFrames: true,
+			delay: 0,
+			repeat: -1,
+			repeatDelay: 0,
+			yoyo: false,
+			showOnStart: false,
+			hideOnComplete: false,
+		  };
 
-      for (var i = 0; i < animation.frameEnd; i++) {
-        let frame = String(i);
-        frame = animation.framePrefix + frame.padStart(4, "0");
-        this.anim.frames.push({
-          key: animation.atlasKey,
-          frame,
-          duration: 0,
-          visible: false,
-        });
-      }
+		  for (var i = 0; i < animation.frameEnd; i++) {
+			let frame = String(i);
+			frame = animation.framePrefix + frame.padStart(4, "0");
+			this.anim.frames.push({
+			  key: animation.atlasKey,
+			  frame,
+			  duration: 0,
+			  visible: false,
+			});
+		  }
 
-      this.animation_output.anims.push(this.anim);
+		  this.animation_output.anims.push(this.anim);
 
-      fs.writeFileSync(
-        `./out/${className}.json`,
-        JSON.stringify(this.animation_output, null, 4)
-      );
-    }
+		  fs.writeFileSync(
+			`./out/${className}.json`,
+			JSON.stringify(this.animation_output, null, 4)
+		  );
+		}
+	}
 
     for (var i = 0; i < this.image_temp_list.length; i++) {
       this.output.displayList.unshift(this.image_temp_list[i]);
