@@ -44,6 +44,9 @@ class RoomScene {
 			url: "https://phasereditor2d.com",
 			contentType: "phasereditor2d.core.scene.SceneContentType",
 		};
+        this.events = new Object();
+        this.events.emit = (...arg) => {};
+        
 		this.animation_output = {};
 		this.animation_output.anims = [];
 		this.animation_output.globalTimeScale = 1;
@@ -107,6 +110,7 @@ class RoomScene {
 		this.image_temp_list.unshift(image_instance);
 		return image_instance;
 	}
+    
 	sprite(x, y, texture, frame) {
 		this.spriteCount++;
 		let id = uuidv4();
@@ -250,8 +254,8 @@ class Prefab {
 		return new Container(this, id, container);
 	}
 }
-class Container {#
-	decompiler;
+class Container {
+	#decompiler;
 	constructor(decompiler, id, container) {
 		this.#decompiler = decompiler;
 		this.id = id;
